@@ -111,21 +111,21 @@ int main(void)
         0.0f, 0.0f, 1.0f    // vertex 3
     };
 
-    Vector2 curr[4]
-    {
-        { -1.0f,  1.0f },   // top-left
-        {  1.0f,  1.0f },   // top-right
-        {  1.0f, -1.0f },   // bot-right
-        { -1.0f, -1.0f }    // bot-left
-    };
+    //Vector2 curr[4]
+    //{
+    //    { -1.0f,  1.0f },   // top-left
+    //    {  1.0f,  1.0f },   // top-right
+    //    {  1.0f, -1.0f },   // bot-right
+    //    { -1.0f, -1.0f }    // bot-left
+    //};
 
-    Vector2 next[4]
-    {
-        (curr[0] + curr[1]) * 0.5f,
-        (curr[1] + curr[2]) * 0.5f,
-        (curr[2] + curr[3]) * 0.5f,
-        (curr[3] + curr[0]) * 0.5f
-    };
+    //Vector2 next[4]
+    //{
+    //    (curr[0] + curr[1]) * 0.5f,
+    //    (curr[1] + curr[2]) * 0.5f,
+    //    (curr[2] + curr[3]) * 0.5f,
+    //    (curr[3] + curr[0]) * 0.5f
+    //};
 
     // vao = "Vertex Array Object". A vao is a collection of vbos.
     // vbo = "Vertex Buffer Object". "Buffer" generally means "group of memory".
@@ -157,6 +157,8 @@ int main(void)
     glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(Vector2), curr, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vector2), nullptr);
     glEnableVertexAttribArray(0);*/
+
+    /* Square Bufffer */
     GLuint vaoLines, vboLines;
     glGenVertexArrays(1, &vaoLines);
     glBindVertexArray(vaoLines);
@@ -165,7 +167,7 @@ int main(void)
     glBindBuffer(GL_ARRAY_BUFFER, vboLines);
 
     // Generate vertices for 8 squares
-    std::vector<Vector2> squareVertices = generateSquareVertices(8);
+    std::vector<Vector2> squareVertices = generateSquareVertices(12);
     glBufferData(GL_ARRAY_BUFFER, squareVertices.size() * sizeof(Vector2), squareVertices.data(), GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vector2), nullptr);
@@ -273,11 +275,11 @@ int main(void)
             shaderProgram = shaderLines;
             glUseProgram(shaderProgram);
             glUniform1f(glGetUniformLocation(shaderProgram, "u_a"), a);
-            glLineWidth(2.0f);
+            glLineWidth(5.0f);
             glBindVertexArray(vaoLines);
 
             // Draw 8 squares
-            for (int i = 0; i < 8; ++i) {
+            for (int i = 0; i < 12; ++i) {
                 glDrawArrays(GL_LINE_LOOP, i * 4, 4);
             }
             break;
