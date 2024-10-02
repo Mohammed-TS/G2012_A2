@@ -34,20 +34,20 @@ std::vector<Vector2> generateSquareVertices(int numSquares) {
         { -1.0f, -1.0f }  // bottom-left
     };
 
-    for (int i = 0; i < numSquares; ++i) {
+    for (int i = 0; i < numSquares; i++) {
         // Add current square vertices
-        for (int j = 0; j < 4; ++j) {
+        for (int j = 0; j < 4; j++) {
             vertices.push_back(curr[j]);
         }
 
         // Calculate next square vertices
         Vector2 next[4];
-        for (int j = 0; j < 4; ++j) {
+        for (int j = 0; j < 4; j++) {
             next[j] = (curr[j] + curr[(j + 1) % 4]) * 0.5f;
         }
 
         // Update curr for next iteration
-        for (int j = 0; j < 4; ++j) {
+        for (int j = 0; j < 4; j++) {
             curr[j] = next[j];
         }
     }
@@ -148,23 +148,16 @@ int main(void)
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vector3), 0);          // Describe the buffer
     glEnableVertexAttribArray(1);
 
-   /* GLuint vaoLines, pboLines, cboLines;
+    GLuint vaoLines, pboLines, cboLines;
     glGenVertexArrays(1, &vaoLines);
     glBindVertexArray(vaoLines);
-
-    glGenBuffers(1, &pboLines);
-    glBindBuffer(GL_ARRAY_BUFFER, pboLines);
-    glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(Vector2), curr, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vector2), nullptr);
-    glEnableVertexAttribArray(0);*/
 
     /* Square Bufffer */
-    GLuint vaoLines, vboLines;
-    glGenVertexArrays(1, &vaoLines);
-    glBindVertexArray(vaoLines);
-
-    glGenBuffers(1, &vboLines);
-    glBindBuffer(GL_ARRAY_BUFFER, vboLines);
+    glGenBuffers(1, &pboLines);
+    glBindBuffer(GL_ARRAY_BUFFER, pboLines);
+   /* glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(Vector2), curr, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vector2), nullptr);
+    glEnableVertexAttribArray(0);*/
 
     // Generate vertices for 8 squares
     std::vector<Vector2> squareVertices = generateSquareVertices(12);
@@ -279,7 +272,7 @@ int main(void)
             glBindVertexArray(vaoLines);
 
             // Draw 8 squares
-            for (int i = 0; i < 12; ++i) {
+            for (int i = 0; i < 12; i++) {
                 glDrawArrays(GL_LINE_LOOP, i * 4, 4);
             }
             break;
