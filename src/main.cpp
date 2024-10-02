@@ -254,27 +254,24 @@ int main(void)
 
         case 3:
             // TODO -- read up on glBufferSubData to understand what on earth just happened ;)
-           /* shaderProgram = shaderLines;
-            glUseProgram(shaderProgram);
-            glUniform1f(glGetUniformLocation(shaderProgram, "u_a"), a);
-            glLineWidth(10.0f);
-            glBindVertexArray(vaoLines);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(Vector2), curr);
-            glDrawArrays(GL_LINE_LOOP, 0, 4);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(Vector2), next);
-            glDrawArrays(GL_LINE_LOOP, 0, 4);   
-
-            break;*/
             shaderProgram = shaderLines;
             glUseProgram(shaderProgram);
             glUniform1f(glGetUniformLocation(shaderProgram, "u_a"), a);
             glLineWidth(5.0f);
             glBindVertexArray(vaoLines);
+            shaderProgram = shaderLines;
+            glUseProgram(shaderProgram);
+            glUniform1f(glGetUniformLocation(shaderProgram, "u_a"), a);
 
             // Draw 8 squares
             for (int i = 0; i < 12; i++) {
                 glDrawArrays(GL_LINE_LOOP, i * 4, 4);
             }
+
+            /*glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(Vector2), curr);
+            glDrawArrays(GL_LINE_LOOP, 0, 4);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(Vector2), next);
+            glDrawArrays(GL_LINE_LOOP, 0, 4); */  
             break;
 
         case 4:
