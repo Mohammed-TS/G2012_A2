@@ -8,6 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <array>
+#include <vector>
 
 constexpr int SCREEN_WIDTH = 1280;
 constexpr int SCREEN_HEIGHT = 720;
@@ -24,6 +25,35 @@ bool IsKeyUp(int key);
 bool IsKeyPressed(int key);
 
 void Print(Matrix m);
+std::vector<Vector2> generateSquareVertices(int numSquares) {
+    std::vector<Vector2> vertices;
+    Vector2 curr[4] = {
+        { -1.0f, 1.0f },  // top-left
+        { 1.0f, 1.0f },   // top-right
+        { 1.0f, -1.0f },  // bottom-right
+        { -1.0f, -1.0f }  // bottom-left
+    };
+
+    for (int i = 0; i < numSquares; ++i) {
+        // Add current square vertices
+        for (int j = 0; j < 4; ++j) {
+            vertices.push_back(curr[j]);
+        }
+
+        // Calculate next square vertices
+        Vector2 next[4];
+        for (int j = 0; j < 4; ++j) {
+            next[j] = (curr[j] + curr[(j + 1) % 4]) * 0.5f;
+        }
+
+        // Update curr for next iteration
+        for (int j = 0; j < 4; ++j) {
+            curr[j] = next[j];
+        }
+    }
+
+    return vertices;
+}
 
 int main(void)
 {
@@ -118,7 +148,7 @@ int main(void)
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vector3), 0);          // Describe the buffer
     glEnableVertexAttribArray(1);
 
-    GLuint vaoLines, pboLines, cboLines;
+   /* GLuint vaoLines, pboLines, cboLines;
     glGenVertexArrays(1, &vaoLines);
     glBindVertexArray(vaoLines);
 
@@ -126,7 +156,21 @@ int main(void)
     glBindBuffer(GL_ARRAY_BUFFER, pboLines);
     glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(Vector2), curr, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vector2), nullptr);
+    glEnableVertexAttribArray(0);*/
+    GLuint vaoLines, vboLines;
+    glGenVertexArrays(1, &vaoLines);
+    glBindVertexArray(vaoLines);
+
+    glGenBuffers(1, &vboLines);
+    glBindBuffer(GL_ARRAY_BUFFER, vboLines);
+
+    // Generate vertices for 8 squares
+    std::vector<Vector2> squareVertices = generateSquareVertices(8);
+    glBufferData(GL_ARRAY_BUFFER, squareVertices.size() * sizeof(Vector2), squareVertices.data(), GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vector2), nullptr);
     glEnableVertexAttribArray(0);
+
 
     // In summary, we need 3 things to render:
     // 1. Vertex data -- right now just positions.
@@ -215,7 +259,7 @@ int main(void)
 
         case 3:
             // TODO -- read up on glBufferSubData to understand what on earth just happened ;)
-            shaderProgram = shaderLines;
+           /* shaderProgram = shaderLines;
             glUseProgram(shaderProgram);
             glUniform1f(glGetUniformLocation(shaderProgram, "u_a"), a);
             glLineWidth(10.0f);
@@ -223,7 +267,19 @@ int main(void)
             glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(Vector2), curr);
             glDrawArrays(GL_LINE_LOOP, 0, 4);
             glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(Vector2), next);
-            glDrawArrays(GL_LINE_LOOP, 0, 4);
+            glDrawArrays(GL_LINE_LOOP, 0, 4);   
+
+            break;*/
+            shaderProgram = shaderLines;
+            glUseProgram(shaderProgram);
+            glUniform1f(glGetUniformLocation(shaderProgram, "u_a"), a);
+            glLineWidth(2.0f);
+            glBindVertexArray(vaoLines);
+
+            // Draw 8 squares
+            for (int i = 0; i < 8; ++i) {
+                glDrawArrays(GL_LINE_LOOP, i * 4, 4);
+            }
             break;
 
         case 4:
