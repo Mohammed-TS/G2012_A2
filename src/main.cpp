@@ -155,11 +155,11 @@ int main(void)
     /* Square Bufffer */
     glGenBuffers(1, &pboLines);
     glBindBuffer(GL_ARRAY_BUFFER, pboLines);
-   /* glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(Vector2), curr, GL_STATIC_DRAW);
+   /*glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(Vector2), curr, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vector2), nullptr);
     glEnableVertexAttribArray(0);*/
 
-    // Generate vertices for 8 squares
+    // Generate vertices for 12 squares
     std::vector<Vector2> squareVertices = generateSquareVertices(12);
     glBufferData(GL_ARRAY_BUFFER, squareVertices.size() * sizeof(Vector2), squareVertices.data(), GL_STATIC_DRAW);
 
@@ -259,10 +259,6 @@ int main(void)
             glUniform1f(glGetUniformLocation(shaderProgram, "u_a"), a);
             glLineWidth(5.0f);
             glBindVertexArray(vaoLines);
-            shaderProgram = shaderLines;
-            glUseProgram(shaderProgram);
-            glUniform1f(glGetUniformLocation(shaderProgram, "u_a"), a);
-
             // Draw 8 squares
             for (int i = 0; i < 12; i++) {
                 glDrawArrays(GL_LINE_LOOP, i * 4, 4);
